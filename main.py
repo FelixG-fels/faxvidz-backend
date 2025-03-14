@@ -15,6 +15,9 @@ def home():
 
 @app.get("/generate-image")
 def generate_image(prompt: str):
+    if not DALL_E_API_KEY:
+        return {"error": "OpenAI API Key is missing!"}
+
     response = requests.post(
         "https://api.openai.com/v1/images/generations",
         headers={"Authorization": f"Bearer {DALL_E_API_KEY}"},
@@ -24,6 +27,9 @@ def generate_image(prompt: str):
 
 @app.get("/generate-video")
 def generate_video(prompt: str):
+    if not RUNWAYML_API_KEY:
+        return {"error": "RunwayML API Key is missing!"}
+
     response = requests.post(
         "https://api.runwayml.com/v1/generate-video",
         headers={"Authorization": f"Bearer {RUNWAYML_API_KEY}"},
@@ -33,9 +39,10 @@ def generate_video(prompt: str):
 
 @app.get("/generate-voice")
 def generate_voice(text: str):
+    if not ELEVENLABS_API_KEY:
+        return {"error": "ElevenLabs API Key is missing!"}
+
     response = requests.post(
         "https://api.elevenlabs.io/v1/text-to-speech",
         headers={"Authorization": f"Bearer {ELEVENLABS_API_KEY}"},
         json={"text": text}
-    )
-    return response.json()
